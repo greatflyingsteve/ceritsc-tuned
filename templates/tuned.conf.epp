@@ -1,4 +1,7 @@
-<% | Hash[String[1], Hash[String[1],Variant[String[1],Numeric]]] $data | -%>
+<% | 
+  Hash[String[1], Hash[String[1],Variant[String[1],Numeric]]] $data,
+  Array[String[1]] $quoted_sections = ['sysctl'],
+| -%>
 #
 # tuned configuration managed by Puppet
 #
@@ -6,6 +9,6 @@
 
 [<%= $section %>]
 <% sort(keys($data[$section])).each |$key| { -%>
-<%= $key %>=<% if (' ' in $data[$section][$key]) { -%>"<%= $data[$section][$key] %>"<% } else { -%><%= $data[$section][$key] %><% } %>
+<%= $key %>=<% if (' ' in $data[$section][$key]) and ($section in $quoted_sections) { -%>"<%= $data[$section][$key] %>"<% } else { -%><%= $data[$section][$key] %><% } %>
 <% } -%>
 <% } -%>
